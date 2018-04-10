@@ -4,6 +4,8 @@
 #include <string>
 #include <queue>
 
+using namespace std;
+
 class TuringMachine
 {
     //Estado inicial
@@ -14,6 +16,10 @@ class TuringMachine
 
     public:
         TuringMachine(list);
+
+        //Dado um arquivo de entrada, carrega a máquina
+        static TuringMachine load(string path);
+
         //Retorna se foi aceito ou não
-        virtual bool execute(list<char> input);
+        bool execute(list<char> input);
 }
