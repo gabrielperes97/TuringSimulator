@@ -2,7 +2,9 @@
 
 #include "State.hpp"
 #include <string>
-#include <queue>
+#include <list>
+//#include "Load.hpp"
+class Load;
 
 using namespace std;
 
@@ -14,12 +16,30 @@ class TuringMachine
     //Lista de estados
     list<State> _states;
 
-    public:
-        TuringMachine(list);
+    //alfabeto extendido
+    list<char> _syms;
 
-        //Dado um arquivo de entrada, carrega a máquina
-        static TuringMachine load(string path);
+    //Simbolos terminais
+    list<char> _terminalSyms;
+
+    private:
+        //Só a função load pode carregar a TuringMachine
+        TuringMachine();
+
+    public:
+
+        //Dado um arquivo de entrada, carrega a máquina e suas cadeias
+        static Load load(string path);
 
         //Retorna se foi aceito ou não
-        bool execute(list<char> input);
-}
+        bool execute(string input);
+
+};
+
+//Uma classe só para guardar um conjunto de Máquina + cadeias à serem executadas
+class Load
+{
+    public:
+    TuringMachine machine;
+    list<Input> inputs;
+};

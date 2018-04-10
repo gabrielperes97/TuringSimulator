@@ -5,7 +5,11 @@
 //Também não sei...
 
 //Preciso disso por causa da referência cruzada entre um estado ter eventos e um evento ter um estado alvo.
+#include "Input.hpp"
+
 class State;
+
+using namespace std;
 
 class Event
 {
@@ -35,5 +39,5 @@ class Event
         State * isValid(char sym);
 
         //Realiza a substituição e movimentação na cadeia
-        void execute(void *cadeia);
-}
+        void execute(Input input);
+};
