@@ -3,17 +3,19 @@
 using namespace std;
 class Input
 {
-    //Posição atual da cadeia
-    //Deve começar na 1
-    int _pos;
 
     //Cadeia propriamente dita
     //Deve ser iniciada com B(branco) nas extremidades
-    char _input[];
+    string _input;
 
     public:
-        Input();
+        //Posição atual da cadeia
+        //Deve começar na 1
+        int _pos;
+
         Input(string input);
         char getAtualSym();
         char move(char direction);
+        void replace(char c);
+        string toString();
 };

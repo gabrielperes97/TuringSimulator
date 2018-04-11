@@ -1,6 +1,8 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <cstring>
+#include "TuringMachine.hpp"
 
 using namespace std;
 
@@ -14,6 +16,8 @@ int main (int argc, char const *argv[])
 
     bool hasOutput = false;
     string output;
+
+	bool showInstantDescription = false;
 
     for (int i=0; i<argc; i++)
     {
@@ -30,7 +34,7 @@ int main (int argc, char const *argv[])
 				return 4;
 			}
         }
-        else if (strcmp(argv[i], "-in")==0)
+        else if (strcmp(argv[i], "-out")==0)
         {
             hasOutput = true;
             i++;
@@ -43,6 +47,10 @@ int main (int argc, char const *argv[])
 				return 4;
 			}
         }
+		else if (strcmp(argv[i], "-show") == 0)
+		{
+			showInstantDescription = true;
+		}
     }
 
     if (hasInput == false)
@@ -51,7 +59,35 @@ int main (int argc, char const *argv[])
 				menu();
 		return 1;
 	}
+
+	Load loaded = TuringMachine::load(input);
+	ofstream out;
+
+	//cout << loaded._machine->toString() << endl;
+
+
+	if (hasOutput)
+		out = ofstream(output);
+
+	while (!loaded._inputs.empty())
+	{
+		if (loaded._machine.execute(loaded._inputs.front(), showInstantDescription))
+		{
+			cout << "aceita" << endl;
+			if (hasOutput)
+				out << "aceita" << endl;
+		}
+		else
+		{
+			cout << "rejeita" << endl;
+			if (hasOutput)
+				out << "rejeita" << endl;
+		}
+		loaded._inputs.pop();
+	}
+	return 0;
 }
+
 
 void menu()
 {
@@ -64,4 +100,5 @@ void menu()
 	cout << endl;
 	cout << "  " << "[OPTIONAL PARAMETERS]" << endl;
 	cout << "  " << "-out $outputFile" << "    " << "Save the output to the file" << endl; 
+	cout << "  " << "-show" << "	" << "Shows the instant description" << endl;
 }

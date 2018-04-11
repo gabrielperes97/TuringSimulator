@@ -1,16 +1,24 @@
-#include "Event.hpp"
-
-Event::Event(State *taget, char acc, char sub, char dir)
+#include "State.hpp"
+#include <sstream>
+#include <iostream>
+Event::Event(int target, char acc, char sub, char dir):
+_target(target)
 {
-
+    _acc = acc;
+    _sub = sub;
+    _dir = dir;
 }
 
-State * Event::isValid(char sym)
+int Event::execute(Input *input)
 {
-
+    input->replace(_sub);
+    input->move(_dir);
+    return _target;
 }
 
-void Event::execute(Input input)
+string Event::toString()
 {
-
+    stringstream ss;
+    ss << _acc << ", " << _target << ", " << _sub << ", " << _dir;
+    return ss.str();
 }

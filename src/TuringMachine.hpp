@@ -2,7 +2,9 @@
 
 #include "State.hpp"
 #include <string>
-#include <list>
+#include <queue>
+#include <map>
+//#include "Input.hpp"
 //#include "Load.hpp"
 class Load;
 
@@ -11,16 +13,16 @@ using namespace std;
 class TuringMachine
 {
     //Estado inicial
-    State *_start;
+    int _start;
 
     //Lista de estados
-    list<State> _states;
+    map<int, State> _states;
 
     //alfabeto extendido
-    list<char> _syms;
+    string _syms;
 
     //Simbolos terminais
-    list<char> _terminalSyms;
+    string _terminalSyms;
 
     private:
         //Só a função load pode carregar a TuringMachine
@@ -32,7 +34,9 @@ class TuringMachine
         static Load load(string path);
 
         //Retorna se foi aceito ou não
-        bool execute(string input);
+        bool execute(Input input, bool enableInstantDescription);
+
+        string toString();
 
 };
 
@@ -40,6 +44,7 @@ class TuringMachine
 class Load
 {
     public:
-    TuringMachine machine;
-    list<Input> inputs;
+    Load(TuringMachine machine, queue<Input> inputs);
+    TuringMachine _machine;
+    queue<Input> _inputs;
 };
