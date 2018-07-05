@@ -22,7 +22,7 @@ Load TuringMachine::load(string path)
         //Primeira linha: Numero de estados
         getline(file, line);
         int nStates = stoi(line);
-        for (int i=0; i<6; i++)
+        for (int i=0; i<nStates; i++)
         {
             machine._states.insert(pair<int, State>(i, State(i)));
         }
@@ -32,23 +32,51 @@ Load TuringMachine::load(string path)
         //Segunda linha: Conjunto de simbolos terminais
         getline(file, line);
         //regex reAlphabet("^(\\d)( ).*");
-        regex reAlphabet("[0-9]* (.) (.) (.)");
+        regex spliter("([0-9]*) (.*)");
         smatch matches;
-        regex_search(line, matches, reAlphabet);
+        regex_search(line, matches, spliter);
+        int nTerminalSyms = stoi(matches[1]);
+
+        string strTerminalSyms = matches[2];
+        string regexTerminalSyms = "";
+
+        for (int i=0; i<nTerminalSyms; i++)
+        {
+            regexTerminalSyms += "(.)";
+            if (i != nTerminalSyms-1)
+                regexTerminalSyms += " ";
+        }
+
+        regex reAlphabet(regexTerminalSyms);
+        regex_search(strTerminalSyms, matches, reAlphabet);
         machine._terminalSyms = "";
-        machine._terminalSyms += matches[1];
-        machine._terminalSyms += matches[2];
-        machine._terminalSyms += matches[3];
+        for (int i=1; i<=nTerminalSyms; i++)
+        {
+            machine._terminalSyms += matches[i];
+        }
 
         //Terceira linha: Alfabeto não terminal
         getline(file, line);
-        reAlphabet = regex("[0-9]* (.) (.) (.) (.)");
-        regex_search(line, matches, reAlphabet);
+        regex_search(line, matches, spliter);
+        int nAlphabet = stoi(matches[1]);
+
+        string strAlphabetSyms = matches[2];
+        string regexAlphabetSyms = "";
+
+        for (int i=0; i<nAlphabet; i++)
+        {
+            regexAlphabetSyms += "(.)";
+            if (i != nAlphabet-1)
+                regexAlphabetSyms += " ";
+        }
+
+        reAlphabet = regex(regexAlphabetSyms);
+        regex_search(strAlphabetSyms, matches, reAlphabet);
         machine._syms = "";
-        machine._syms += matches[1];
-        machine._syms += matches[2];
-        machine._syms += matches[3];
-        machine._syms += matches[4];
+        for (int i=1; i<=nAlphabet; i++)
+        {
+            machine._syms += matches[i];
+        }
 
         //Quarta linha: Estado de aceitação
         getline(file, line);
@@ -90,14 +118,17 @@ Load TuringMachine::load(string path)
         }
 
         //nLinhas depois = Quantidade de cadeias iniciais
-        getline(file, line);
-        int nInputs = stoi(line);
-
-        //nInputs proximas linhas = Cadeias para serem testadas
-        for (int i=0; i<nInputs; i++)
+        if (!file.eof())
         {
             getline(file, line);
-            inputs.push(Input(line));
+            int nInputs = stoi(line);
+
+            //nInputs proximas linhas = Cadeias para serem testadas
+            for (int i=0; i<nInputs; i++)
+            {
+                getline(file, line);
+                inputs.push(Input(line));
+            }
         }
     }
     return Load(machine, inputs);

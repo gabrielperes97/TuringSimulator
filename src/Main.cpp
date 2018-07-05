@@ -61,6 +61,10 @@ int main (int argc, char const *argv[])
 	}
 
 	Load loaded = TuringMachine::load(input);
+	if (loaded._inputs.empty())
+	{
+		cout << "Sem entradas para executar" << endl;
+	}
 	ofstream out;
 
 	//cout << loaded._machine->toString() << endl;

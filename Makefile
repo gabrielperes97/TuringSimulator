@@ -8,10 +8,10 @@ OBJ_FILES := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRC_FILES))
 all: create_path turingSimulator
 
 turingSimulator: $(OBJ_FILES)
-	g++ $(LDFLAGS) -o $@ $^ -I $(SRC_DIR) 
+	g++ -g $(LDFLAGS) -o $@ $^ -I $(SRC_DIR) 
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	g++ $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $< -I $(SRC_DIR)
+	g++ -g $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $< -I $(SRC_DIR)
 
 create_path:
 	mkdir -p $(OBJ_DIR)
